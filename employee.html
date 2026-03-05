@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wilmot Modular - Annual Performance Evaluation (Employee)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        /* Match print view width: 8.5in page − 2×3mm @page margin ≈ 801px */
+        .container {
+            max-width: 801px;
+            margin: 0 auto;
+            background: white;
+            padding: 0 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            margin-top: 36px;
+        }
+
+        .header h1 {
+            color: #0066cc;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .employee-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+        }
+
+        .info-field {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .info-field label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .info-field input {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            height: 38px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .review-date-print-blank { display: none !important; }
+        .signature-date-print-blank { display: none !important; }
+
+        .rating-scale {
+            background: #e6f2ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .rating-scale h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .rating-scale-item { margin-bottom: 8px; font-size: 14px; }
+        .rating-scale-item strong { color: #0066cc; }
+
+        .rating-scale-instructions {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #0066cc;
+        }
+
+        .rating-scale-instructions h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .rating-scale-instructions ol {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 14px;
+        }
+
+        .rating-scale-instructions li { margin-bottom: 8px; }
+        .rating-scale-instructions li::marker { font-weight: bold; }
+
+        .section {
+            margin-bottom: 24px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 16px;
+            background: #fff;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #0066cc;
+        }
+
+        .section-title { font-size: 20px; font-weight: bold; color: #0066cc; }
+        .section-weight { font-size: 16px; color: #666; }
+        .section-score { font-size: 16px; font-weight: bold; color: #0066cc; }
+
+        .section-description {
+            margin-bottom: 10px;
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .subsection {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 4px;
+        }
+
+        .subsection-title { font-weight: 600; margin-bottom: 6px; color: #333; }
+
+        .question {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 4px;
+        }
+
+        .question-text { font-weight: 600; margin-bottom: 6px; color: #333; }
+
+        .rating-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+            background: #fff;
+            padding: 8px 0;
+        }
+
+        .rating-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .rating-btn:hover { border-color: #0066cc; background: #e6f2ff; }
+        .rating-btn.selected { background: #0066cc; color: white; border-color: #0066cc; }
+
+        .section-comment { margin-top: 2px; }
+
+        .section-comment label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: #555;
+        }
+
+        .comment-height-label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .comment-height-label.comment-over-max-height { color: #c00; }
+
+        .char-count { display: none; font-size: 12px; color: #666; margin-bottom: 4px; }
+        .char-count.comment-over-max-height { color: #c00; }
+
+        .section-comment textarea {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .section-comment-tall textarea { min-height: 100px; }
+
+        .summary {
+            background: #e6f2ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+            border: 2px solid #0066cc;
+        }
+
+        .summary h2 { color: #0066cc; margin-bottom: 15px; }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .summary-item:last-child { border-bottom: none; }
+
+        .overall-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #0066cc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary { background: #0066cc; color: white; }
+        .btn-primary:hover { background: #0052a3; }
+
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .signature-section {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+        }
+        .signature-section h3 { grid-column: 1 / -1; margin-bottom: 0; }
+
+        .signature-field {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .signature-field label { font-weight: bold; margin-bottom: 5px; color: #555; }
+
+        .signature-field input {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            height: 38px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #fff;
+        }
+
+        .signature-field input[type="date"] {
+            height: 38px !important;
+            min-height: 38px;
+            max-height: 38px;
+            width: 100%;
+            min-width: 0;
+            padding: 8px;
+            line-height: 1.25;
+            background: #fff;
+        }
+
+        .page-break-before { page-break-before: always; }
+        .page-break-inside-avoid { page-break-inside: avoid; }
+
+        .goals-note {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        .manager-pdf-note {
+            margin-top: 28px;
+            margin-bottom: 0;
+            padding: 12px 16px;
+            font-size: 12px;
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            max-width: 801px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        /* Don't apply single-column layout when printing */
+        @media screen and (max-width: 768px) {
+            .container { padding: 20px; }
+            .employee-info, .signature-section { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
+        /* Print: minimal page margins (white space around the page) */
+        @media print {
+            @page { margin: 3mm; }
+
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white;
+            }
+
+            body { max-width: none; }
+
+            .container {
+                box-shadow: none;
+                padding: 0 4px;
+                max-width: none;
+            }
+
+            /* First page: fill one page, minimal top margin */
+            .first-page-print-block {
+                min-height: calc(11in - 6mm);
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: calc((11in - 6mm) * 0.025);
+                page-break-after: always;
+                box-sizing: border-box;
+            }
+
+            /* Last page: same layout, content starts ~25% down */
+            .last-page-print-block {
+                min-height: calc(11in - 6mm);
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: calc((11in - 6mm) * 0.25);
+                page-break-before: always;
+                box-sizing: border-box;
+            }
+
+            .actions { display: none !important; }
+            .char-count, .comment-height-label { display: none !important; }
+
+            .header, .employee-info, .rating-scale, .summary, .signature-section, .manager-pdf-note {
+                page-break-inside: avoid;
+            }
+
+            .section { page-break-inside: auto; }
+            .section-comment { page-break-before: avoid; page-break-inside: avoid; }
+
+            .info-field input, .signature-field input { padding: 2px; }
+            .signature-field { margin-bottom: 4px; }
+
+            .rating-scale h3, .rating-scale-item { margin: 0 0 2px 0; }
+            .rating-scale-instructions h3, .rating-scale-instructions li { margin: 0 0 2px 0; }
+
+            .summary { margin: 0; margin-bottom: 6px; padding: 8px; }
+            .summary h2, .summary-item, .overall-score { margin: 0 0 2px 0; padding: 2px 0; }
+
+            .signature-section {
+                margin-top: 8px;
+                /* FIX: use explicit columns instead of undefined CSS vars */
+                grid-template-columns: 1fr 240px;
+                padding: 20px 40px 20px 20px;
+                gap: 20px;
+                background: #ffffff;
+                border-radius: 5px;
+            }
+
+            .signature-field label { font-weight: bold; margin-bottom: 5px; color: #555; }
+            .signature-field input {
+                height: 38px;
+                padding: 2px;
+                font-size: 14px;
+                border-radius: 4px;
+                box-sizing: border-box;
+                width: 100%;
+                min-width: 0;
+            }
+            .signature-field input[type="date"] { height: 38px; min-height: 38px; padding: 2px; }
+
+            .section-comment textarea, .info-field input, .signature-field input { border: 1px solid #ccc; }
+
+            .section-comment textarea {
+                width: 100% !important;
+                max-width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                line-height: 1.6;
+                overflow: hidden;
+                box-sizing: border-box;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            input[type="date"]:placeholder-shown { color: transparent !important; }
+
+            .review-date-empty-print #reviewDate {
+                visibility: hidden !important;
+                position: absolute !important;
+                left: -9999px !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+            }
+            .review-date-empty-print .review-date-print-blank {
+                display: inline-block !important;
+                height: 38px;
+                min-height: 38px;
+                padding: 2px 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                min-width: 220px;
+                box-sizing: border-box;
+                letter-spacing: 0.15em;
+                background: #fff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                line-height: 32px;
+            }
+
+            .signature-date-empty-print input[type="date"] {
+                visibility: hidden !important;
+                position: absolute !important;
+                left: -9999px !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+            }
+            .signature-date-empty-print .signature-date-print-blank {
+                display: inline-block !important;
+                height: 38px;
+                min-height: 38px;
+                padding: 2px 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                min-width: 220px;
+                box-sizing: border-box;
+                letter-spacing: 0.15em;
+                background: #fff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                line-height: 32px;
+            }
+
+            .section {
+                margin-bottom: 14px;
+                padding: 12px;
+                background: #fff !important;
+                border: 1px solid #ccc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .section-header { margin-bottom: 8px; padding-bottom: 4px; }
+            .section-description { margin-bottom: 6px; }
+
+            .subsection { margin-bottom: 6px; padding: 8px; }
+            .subsection-title { margin-bottom: 4px; }
+
+            .question { margin-bottom: 6px; padding: 8px; }
+            .question-text { margin-bottom: 4px; }
+
+            .section-comment { margin-top: 8px; }
+            .section-comment label { margin-bottom: 2px; }
+
+            .page-break-before { margin-top: 14px; }
+
+            .additional-comments-empty { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="formContainer">
+        <div class="first-page-print-block">
+            <div class="header">
+                <h1>Wilmot Modular Structures, Inc.</h1>
+                <h2>Annual <strong>EMPLOYEE</strong> Performance Evaluation</h2>
+            </div>
+
+            <div class="employee-info">
+                <div class="info-field">
+                    <label for="employeeName">Employee Name:</label>
+                    <input type="text" id="employeeName" name="employeeName" />
+                </div>
+                <div class="info-field">
+                    <label for="reviewerName">Reviewer Name:</label>
+                    <input type="text" id="reviewerName" name="reviewerName" />
+                </div>
+                <div class="info-field">
+                    <label for="position">Position:</label>
+                    <input type="text" id="position" name="position" />
+                </div>
+                <div class="info-field" id="reviewDateField">
+                    <label for="reviewDate">Review Date:</label>
+                    <input type="date" id="reviewDate" name="reviewDate" />
+                    <span class="review-date-print-blank" id="reviewDatePrintBlank" aria-hidden="true">
+                        &nbsp; &nbsp; / &nbsp; &nbsp; / &nbsp; &nbsp;
+                    </span>
+                </div>
+            </div>
+
+            <div class="rating-scale">
+                <h3>Wilmot's 4-Point Rating Scale</h3>
+                <div class="rating-scale-item"><strong>Excelling:</strong> Consistently goes above and beyond. Sets a strong example and lives out Wilmot's core values in meaningful ways.</div>
+                <div class="rating-scale-item"><strong>Performing:</strong> Reliably meets expectations and carries out responsibilities effectively. A strong, steady contributor to the team and culture.</div>
+                <div class="rating-scale-item"><strong>Developing:</strong> Progressing in the role with potential. Some areas need more consistency, focus, or support to fully meet expectations.</div>
+                <div class="rating-scale-item"><strong>Underperforming:</strong> Struggling to meet expectations in key areas. Needs improvement and may require coaching or more direct support.</div>
+
+                <div class="rating-scale-instructions">
+                    <h3>Instructions</h3>
+                    <ol>
+                        <li>Double check using correct form: Annual EMPLOYEE Performance Evaluation or Annual MANAGER Performance Evaluation (for anyone managing employees or with a Manager title).</li>
+                        <li>Complete the form in full.</li>
+                        <li>The only optional section is Milestones &amp; Accomplishments (leave blank only if there's nothing additional to add).</li>
+                        <li>Complete all other comment fields — these must be filled out for the form to save properly.</li>
+                        <li>If ADDITIONAL comment space is needed, see the last section for added space.</li>
+                        <li>When finished, click the button at the bottom to Save to PDF.</li>
+                        <li>Save the PDF using this file name format: PerformEval – Employee Name – [Date].</li>
+                        <li>Email Barbara using this subject Line format: PerformEval – Employee Name – [Date].</li>
+                        <li>Once the evaluation and PAF are approved, schedule your Evaluation Meeting with employee.</li>
+                        <li>Returned signed &amp; dated physical forms to Susan for filing in Personnel Files.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div id="sectionsContainer"></div>
+
+        <div class="section page-break-before page-break-inside-avoid" id="developmentLearningSection">
+            <div class="section-header">
+                <div><span class="section-title">Development &amp; Learning (Optional)</span></div>
+            </div>
+            <div class="section-description">
+                Please list any notable certifications or milestones that were achieved during the applicable review period. Provide narrative feedback as you see fit on these achievements!
+            </div>
+            <div class="section-comment">
+                <span class="comment-height-label" id="developmentLearning-height" aria-live="polite"></span>
+                <label for="developmentLearning">Comments:</label>
+                <span class="char-count" id="developmentLearning-count" aria-live="polite" style="display: none;"></span>
+                <textarea class="comment-field" id="developmentLearning" name="developmentLearning" maxlength="4000" data-max-height="150" placeholder="Enter development and learning achievements..."></textarea>
+            </div>
+        </div>
+
+        <div class="section page-break-inside-avoid" id="futureGoalsSection">
+            <div class="section-header">
+                <div><span class="section-title">Future Goals &amp; Focus</span></div>
+            </div>
+            <div class="section-description">
+                Supervisor outlines 3 to 4 forward-looking goals/Rocks with clear objectives that align with the employee's role and Wilmot's priorities. These goals should be meaningful and aligned with the strategic initiatives and Rocks discussed in L10 leadership meetings.
+            </div>
+            <p class="goals-note" title="Goals should have clarity, context, and measurable targets.">Goals should have clarity, context, and measurable targets.</p>
+            <div class="section-comment">
+                <span class="comment-height-label" id="futureGoals-height" aria-live="polite"></span>
+                <label for="futureGoals">Comments:</label>
+                <span class="char-count" id="futureGoals-count" aria-live="polite" style="display: none;"></span>
+                <textarea class="comment-field" id="futureGoals" name="futureGoals" maxlength="4000" data-max-height="150" placeholder="Enter future goals and focus areas..."></textarea>
+            </div>
+        </div>
+
+        <div class="section" id="finalSummarySection">
+            <div class="section-header">
+                <div><span class="section-title">Final Performance Summary</span></div>
+            </div>
+            <div class="section-description">
+                Summarizes and highlights overall performance, key strengths and contributions, and growth during the review period.
+            </div>
+            <div class="section-comment section-comment-tall">
+                <span class="comment-height-label" id="finalSummary-height" aria-live="polite"></span>
+                <label for="finalSummary">Comments:</label>
+                <span class="char-count" id="finalSummary-count" aria-live="polite" style="display: none;"></span>
+                <textarea class="comment-field" id="finalSummary" name="finalSummary" maxlength="4000" data-max-height="150" placeholder="Enter final performance summary..."></textarea>
+            </div>
+        </div>
+
+        <div class="section page-break-before page-break-inside-avoid additional-comments-empty" id="additionalCommentsSection">
+            <div class="section-header">
+                <div><span class="section-title">Additional Comments (Optional)</span></div>
+            </div>
+            <div class="section-description">
+                Optional space for any further notes or information about the employee or the review period.
+            </div>
+            <div class="section-comment section-comment-tall">
+                <span class="comment-height-label" id="additionalComments-height" aria-live="polite"></span>
+                <label for="additionalComments">Comments:</label>
+                <span class="char-count" id="additionalComments-count" aria-live="polite" style="display: none;"></span>
+                <textarea class="comment-field" id="additionalComments" name="additionalComments" maxlength="4000" data-max-height="750" placeholder="Enter any additional notes or information..."></textarea>
+            </div>
+        </div>
+
+        <div class="summary page-break-before" id="summarySection" style="display: none;">
+            <h2>Performance Summary</h2>
+            <div id="summaryContent"></div>
+            <div class="overall-score" id="overallScore"></div>
+        </div>
+
+        <div class="signature-section">
+            <h3 style="margin-bottom: 15px; color: #0066cc;">Signature</h3>
+            <div class="signature-field">
+                <label for="employeeSignature">Employee Signature:</label>
+                <input type="text" id="employeeSignature" name="employeeSignature" />
+            </div>
+            <div class="signature-field" id="employeeSignatureDateField">
+                <label for="employeeSignatureDate">Date:</label>
+                <input type="date" id="employeeSignatureDate" name="employeeSignatureDate" />
+                <span class="signature-date-print-blank" aria-hidden="true"> &nbsp; &nbsp; / &nbsp; &nbsp; / &nbsp; &nbsp; </span>
+            </div>
+            <div class="signature-field">
+                <label for="supervisorSignature">Supervisor Signature:</label>
+                <input type="text" id="supervisorSignature" name="supervisorSignature" />
+            </div>
+            <div class="signature-field" id="supervisorSignatureDateField">
+                <label for="supervisorSignatureDate">Date:</label>
+                <input type="date" id="supervisorSignatureDate" name="supervisorSignatureDate" />
+                <span class="signature-date-print-blank" aria-hidden="true"> &nbsp; &nbsp; / &nbsp; &nbsp; / &nbsp; &nbsp; </span>
+            </div>
+        </div>
+
+        <p class="manager-pdf-note">
+            <strong>NOTE:</strong> Managers, please SAVE AS PDF: PerformEval – Employee Name – [Date] and forward to Barbara with subject to match. Once the PAF in Paycom is fully approved and submitted to payroll, print this PDF and schedule your Evaluation Meeting with Employee.
+        </p>
+
+        <div class="actions no-print">
+            <button id="printPdfBtn" type="button" class="btn btn-primary" disabled>Print / Save as PDF</button>
+        </div>
+        <p id="storageTip" class="no-print" style="display:none; margin-top:12px; font-size:12px; color:#666; max-width:801px; margin-left:auto; margin-right:auto;"></p>
+    </div>
+
+    <script>
+        // --- Edit-page options (set to false to hide) ---
+        const CONFIG = { showHeight: true };
+
+        // Form configuration
+        const formConfig = {
+            sections: [
+                {
+                    title: "Section 1: Key Achievements",
+                    weight: 20,
+                    description: "Highlights notable accomplishments from the evaluation period, including outcomes or contributions that go beyond formal goals—whether job-specific wins, impactful projects, or unexpected areas where the employee added value.",
+                    examples: [
+                        "Job-specific deliverables or metrics (as applicable)",
+                        "Standout Contributions or Problem-Solving",
+                        "Added Value Beyond the Scope of Role"
+                    ],
+                    type: "rating-with-comment"
+                },
+                {
+                    title: "Section 2: Role Performance",
+                    weight: 25,
+                    description: "Evaluates employee's overall effectiveness in their role, including the quality and reliability of their work, ability to stay productive, and willingness to take initiative and follow through.",
+                    questions: [
+                        { text: "Quality of Work & Timeliness", description: "Delivers reliable, high-grade work on time and with attention to detail." },
+                        { text: "Accuracy", description: "Maintains high standards of accuracy and attention to detail." },
+                        { text: "Productivity", description: "Maintains steady output and meets workload expectations effectively." },
+                        { text: "Initiative", description: "Takes initiative, volunteers for tasks, and actively seeks ways to improve processes and outcomes." }
+                    ]
+                },
+                {
+                    title: "Section 3: Job Focus & Follow-Through",
+                    weight: 30,
+                    description: "Assesses how well the employee fulfills their core job responsibilities, meets assigned goals, and follows through on expectations and processes.",
+                    type: "special",
+                    subsections: [
+                        { title: "Key responsibilities & Job-specific Deliverables", description: "Are primary job duties being completed reliably and effectively? List 2-3 examples to discuss." },
+                        { title: "Goals Achievement", description: "To what extent were performance or project goals met in the past year? List prior goals and evaluate performance and completion." },
+                        { title: "Adherence to Processes & Standards", description: "Follows established procedures, safety standards, or compliance requirements?" }
+                    ]
+                },
+                {
+                    title: "Section 4: Culture & Collaboration",
+                    weight: 15,
+                    description: "Assesses workplace behaviors and interpersonal dynamics that support Wilmot's culture and teamwork.",
+                    questions: [
+                        { text: "Communication & Responsiveness", description: "Communicates clearly and responds to others' needs or inquiries." },
+                        { text: "Flexibility & Adaptability", description: "Adjusts well to changing priorities, tasks or conditions." },
+                        { text: "Support of Others & Professionalism", description: "Treats others with respect and offers help when needed while maintaining professionalism." },
+                        { text: "Accountability & Follow-Through", description: "Takes ownership of responsibilities and follows through consistently." }
+                    ]
+                },
+                {
+                    title: "Section 5: Growth & Development",
+                    weight: 10,
+                    description: "Reflects employee's openness to learning, commitment to continuous improvement, progress in skill development, and responsiveness to feedback throughout the year.",
+                    questions: [
+                        "Learning Mindset",
+                        "Skills Gained/Training Completed",
+                        "Receptiveness to Feedback"
+                    ]
+                }
+            ]
+        };
+
+        const ratingLabels = ["Underperforming", "Developing", "Performing", "Excelling"];
+        const ratings = {};
+
+        function isPerformanceSummaryComplete() {
+            // Require Sections 1–5 ratings + comment-0..comment-4
+            for (let sectionIndex = 0; sectionIndex < formConfig.sections.length; sectionIndex++) {
+                const section = formConfig.sections[sectionIndex];
+                const sectionRatings = ratings[sectionIndex] || {};
+
+                let expectedCount = 0;
+                if (section.type === "special") expectedCount = section.subsections.length;
+                else if (section.type === "rating-with-comment") expectedCount = 1;
+                else expectedCount = section.questions.length;
+
+                if (Object.keys(sectionRatings).length !== expectedCount) return false;
+
+                const commentEl = document.getElementById(`comment-${sectionIndex}`);
+                if (!commentEl || !commentEl.value || !commentEl.value.trim()) return false;
+            }
+
+            const fg = document.getElementById('futureGoals');
+            if (!fg || !fg.value || !fg.value.trim()) return false;
+
+            const fs = document.getElementById('finalSummary');
+            if (!fs || !fs.value || !fs.value.trim()) return false;
+
+            return true;
+        }
+
+        function updatePrintButtonState() {
+            const btn = document.getElementById('printPdfBtn');
+            if (!btn) return;
+            const ready = isPerformanceSummaryComplete();
+            btn.disabled = !ready;
+            btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+        }
+
+        // Per-section max heights (dynamic comment-${sectionIndex} fields)
+        // 0: 540, 1: 290, 2: 410, 3: 315, 4: 465
+        const sectionMaxHeights = { 0: 540, 1: 290, 2: 410, 3: 315, 4: 465 };
+
+        // ---- Max-height enforcement helpers (revert based) ----
+        const _lastGoodState = new WeakMap();
+
+        function getMaxHeightPx(ta) {
+            if (!ta || !ta.dataset) return null;
+            const raw = ta.dataset.maxHeight;
+            if (raw === undefined || raw === null || String(raw).trim() === '') return null;
+            const n = parseInt(raw, 10);
+            return Number.isFinite(n) && n > 0 ? n : null;
+        }
+
+        function saveLastGoodState(ta) {
+            if (!ta) return;
+            _lastGoodState.set(ta, {
+                value: ta.value || '',
+                start: typeof ta.selectionStart === 'number' ? ta.selectionStart : null,
+                end: typeof ta.selectionEnd === 'number' ? ta.selectionEnd : null
+            });
+        }
+
+        function restoreLastGoodState(ta) {
+            if (!ta) return;
+            const st = _lastGoodState.get(ta);
+            if (!st) return;
+            ta.value = st.value;
+            requestAnimationFrame(() => {
+                try {
+                    if (st.start !== null && st.end !== null) {
+                        ta.setSelectionRange(st.start, st.end);
+                    }
+                } catch (e) { /* ignore */ }
+            });
+        }
+
+        function resizeCommentTextarea(ta) {
+            if (!ta) return;
+            ta.style.height = 'auto';
+            ta.style.height = Math.max(0, ta.scrollHeight) + 'px';
+        }
+
+        function enforceMaxHeightWithRevert(ta) {
+            if (!ta) return;
+            const maxPx = getMaxHeightPx(ta);
+            if (maxPx === null) {
+                saveLastGoodState(ta);
+                return;
+            }
+
+            const requiredPx = ta.scrollHeight;
+            if (requiredPx > maxPx) {
+                restoreLastGoodState(ta);
+                resizeCommentTextarea(ta);
+                updateCommentCharCount(ta);
+            } else {
+                saveLastGoodState(ta);
+            }
+        }
+        // ---- End helpers ----
+
+        function updateCommentCharCount(ta, countId) {
+            const textarea = typeof ta === 'string' ? document.getElementById(ta) : ta;
+            if (!textarea) return;
+
+            const commentHeightPx = textarea.offsetHeight;
+            const maxPx = getMaxHeightPx(textarea);
+
+            const heightLabelId = textarea.id ? textarea.id + '-height' : null;
+            const heightLabel = heightLabelId ? document.getElementById(heightLabelId) : null;
+            if (heightLabel && CONFIG.showHeight) {
+                heightLabel.textContent = 'Height: ' + commentHeightPx + 'px' + (maxPx !== null ? ' (Max: ' + maxPx + 'px)' : '');
+                heightLabel.classList.toggle('comment-over-max-height', maxPx !== null && commentHeightPx > maxPx);
+            }
+
+            const countIdResolved = countId || (textarea.id ? textarea.id + '-count' : null);
+            const span = countIdResolved ? document.getElementById(countIdResolved) : null;
+            if (span) {
+                span.classList.toggle('comment-over-max-height', maxPx !== null && commentHeightPx > maxPx);
+            }
+        }
+
+        function handleCommentInput(ta, countId) {
+            const textarea = typeof ta === 'string' ? document.getElementById(ta) : ta;
+            if (!textarea) return;
+
+            if (!_lastGoodState.has(textarea)) saveLastGoodState(textarea);
+
+            resizeCommentTextarea(textarea);
+            enforceMaxHeightWithRevert(textarea);
+            updateCommentCharCount(textarea, countId);
+        }
+
+        /** Print: content height ranges (min–max inclusive) → pixels per line. Used for all comment fields. */
+        const PRINT_HEIGHT_RANGES = [
+            { min: 0, max: 130, ppl: 19 },
+            { min: 131, max: 200, ppl: 21 },
+            { min: 201, max: 349, ppl: 22 },
+            { min: 350, max: 400, ppl: 23 },
+            { min: 401, max: 520, ppl: 24 },
+        ];
+        const PRINT_DEFAULT_PIXELS_PER_LINE = 25;
+
+        function getPixelsPerLineForPrint(contentHeight) {
+            const range = PRINT_HEIGHT_RANGES.find(r => contentHeight >= r.min && contentHeight <= r.max);
+            return range ? range.ppl : PRINT_DEFAULT_PIXELS_PER_LINE;
+        }
+
+        function setCommentHeightForPrint(ta) {
+            if (!ta) return;
+
+            const minHeight = 60;
+            ta.style.height = '0';
+            void ta.offsetHeight;
+            const contentHeight = ta.scrollHeight;
+            const pixelsPerLine = getPixelsPerLineForPrint(contentHeight);
+            const style = window.getComputedStyle(ta);
+            const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.6;
+            const numLines = Math.max(1, Math.ceil(contentHeight / lineHeight));
+            const totalHeight = Math.max(minHeight, numLines * pixelsPerLine + 20);
+            ta.style.height = totalHeight + 'px';
+            ta.dataset.printContentHeight = String(contentHeight);
+        }
+
+        // FIX: was being called but not defined
+        function scheduleSaveCache() { /* no-op */ }
+
+        function initForm() {
+            const container = document.getElementById('sectionsContainer');
+            container.innerHTML = '';
+
+            formConfig.sections.forEach((section, sectionIndex) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section page-break-inside-avoid';
+                sectionDiv.id = `section-${sectionIndex}`;
+
+                sectionDiv.classList.add('page-break-before');
+
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                sectionHeader.innerHTML = `
+                    <div>
+                        <span class="section-title">${section.title}</span>
+                        <span class="section-weight">(${section.weight}% weight)</span>
+                    </div>
+                    <div class="section-score" id="score-${sectionIndex}">Score: -</div>
+                `;
+                sectionDiv.appendChild(sectionHeader);
+
+                if (section.description) {
+                    const descDiv = document.createElement('div');
+                    descDiv.className = 'section-description';
+                    descDiv.textContent = section.description;
+                    sectionDiv.appendChild(descDiv);
+                }
+
+                if (section.type === "special") {
+                    section.subsections.forEach((subsection, subIndex) => {
+                        const subDiv = document.createElement('div');
+                        subDiv.className = 'subsection';
+
+                        const subTitle = document.createElement('div');
+                        subTitle.className = 'subsection-title';
+                        subTitle.textContent = subsection.title;
+                        subDiv.appendChild(subTitle);
+
+                        if (subsection.description) {
+                            const descDiv = document.createElement('div');
+                            descDiv.style.fontSize = '13px';
+                            descDiv.style.fontStyle = 'italic';
+                            descDiv.style.color = '#666';
+                            descDiv.style.marginTop = '2px';
+                            descDiv.style.marginBottom = '4px';
+                            descDiv.textContent = subsection.description;
+                            subDiv.appendChild(descDiv);
+                        }
+
+                        const ratingDiv = document.createElement('div');
+                        ratingDiv.className = 'rating-buttons';
+                        ratingDiv.style.marginTop = '4px';
+
+                        for (let i = 0; i < 4; i++) {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'rating-btn';
+                            btn.textContent = ratingLabels[i];
+                            btn.dataset.value = i + 1;
+                            btn.onclick = () => selectRating(sectionIndex, subIndex, i + 1);
+                            ratingDiv.appendChild(btn);
+                        }
+
+                        subDiv.appendChild(ratingDiv);
+                        sectionDiv.appendChild(subDiv);
+                    });
+                } else if (section.type === "rating-with-comment") {
+                    if (section.examples && section.examples.length > 0) {
+                        const examplesDiv = document.createElement('div');
+                        examplesDiv.style.marginBottom = '10px';
+                        examplesDiv.style.fontSize = '14px';
+
+                        const examplesTitle = document.createElement('div');
+                        examplesTitle.style.fontWeight = '600';
+                        examplesTitle.style.marginBottom = '6px';
+                        examplesTitle.textContent = 'Examples:';
+                        examplesDiv.appendChild(examplesTitle);
+
+                        const examplesList = document.createElement('ul');
+                        examplesList.style.marginLeft = '20px';
+                        examplesList.style.color = '#666';
+
+                        section.examples.forEach(example => {
+                            const li = document.createElement('li');
+                            li.textContent = example;
+                            examplesList.appendChild(li);
+                        });
+
+                        examplesDiv.appendChild(examplesList);
+                        sectionDiv.appendChild(examplesDiv);
+                    }
+
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+
+                    const questionText = document.createElement('div');
+                    questionText.className = 'question-text';
+                    questionText.textContent = 'Overall Achievement Rating';
+                    questionDiv.appendChild(questionText);
+
+                    const ratingDiv = document.createElement('div');
+                    ratingDiv.className = 'rating-buttons';
+                    for (let i = 0; i < 4; i++) {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'rating-btn';
+                        btn.textContent = ratingLabels[i];
+                        btn.dataset.value = i + 1;
+                        btn.onclick = () => selectRating(sectionIndex, 0, i + 1);
+                        ratingDiv.appendChild(btn);
+                    }
+                    questionDiv.appendChild(ratingDiv);
+                    sectionDiv.appendChild(questionDiv);
+
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'section-comment section-comment-tall';
+                    const maxH = sectionMaxHeights[sectionIndex];
+                    commentDiv.innerHTML = `
+                        <span class="comment-height-label" id="comment-${sectionIndex}-height" aria-live="polite"></span>
+                        <label for="comment-${sectionIndex}">Comments:</label>
+                        <span class="char-count" id="comment-${sectionIndex}-count" aria-live="polite"></span>
+                        <textarea class="comment-field" id="comment-${sectionIndex}" name="comment-${sectionIndex}" maxlength="4000"
+                                  data-max-height="${maxH !== undefined ? maxH : ''}"
+                                  placeholder="Enter comments..."></textarea>
+                    `;
+                    const ta = commentDiv.querySelector('textarea');
+
+                    // Keep only beforeinput here; input is handled centrally at the container level (prevents double-processing)
+                    ta.addEventListener('beforeinput', () => saveLastGoodState(ta));
+
+                    sectionDiv.appendChild(commentDiv);
+                    resizeCommentTextarea(ta);
+                    saveLastGoodState(ta);
+                } else {
+                    const questionsDiv = document.createElement('div');
+
+                    section.questions.forEach((question, questionIndex) => {
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'question';
+
+                        const questionText = document.createElement('div');
+                        questionText.className = 'question-text';
+
+                        if (typeof question === 'object' && question.text) {
+                            questionText.textContent = question.text;
+                            if (question.description) {
+                                const descDiv = document.createElement('div');
+                                descDiv.style.fontSize = '13px';
+                                descDiv.style.fontStyle = 'italic';
+                                descDiv.style.color = '#666';
+                                descDiv.style.marginTop = '5px';
+                                descDiv.style.marginBottom = '8px';
+                                descDiv.textContent = question.description;
+                                questionDiv.appendChild(questionText);
+                                questionDiv.appendChild(descDiv);
+                            } else {
+                                questionDiv.appendChild(questionText);
+                            }
+                        } else {
+                            questionText.textContent = question;
+                            questionDiv.appendChild(questionText);
+                        }
+
+                        const ratingButtons = document.createElement('div');
+                        ratingButtons.className = 'rating-buttons';
+
+                        for (let i = 0; i < 4; i++) {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'rating-btn';
+                            btn.textContent = ratingLabels[i];
+                            btn.dataset.value = i + 1;
+                            btn.onclick = () => selectRating(sectionIndex, questionIndex, i + 1);
+                            ratingButtons.appendChild(btn);
+                        }
+
+                        questionDiv.appendChild(ratingButtons);
+                        questionsDiv.appendChild(questionDiv);
+                    });
+
+                    sectionDiv.appendChild(questionsDiv);
+                }
+
+                if (section.type !== "rating-with-comment") {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'section-comment';
+
+                    const maxH = sectionMaxHeights[sectionIndex];
+                    commentDiv.innerHTML = `
+                        <span class="comment-height-label" id="comment-${sectionIndex}-height" aria-live="polite"></span>
+                        <label for="comment-${sectionIndex}">Comments:</label>
+                        <span class="char-count" id="comment-${sectionIndex}-count" aria-live="polite"></span>
+                        <textarea class="comment-field" id="comment-${sectionIndex}" name="comment-${sectionIndex}" maxlength="4000"
+                                  data-max-height="${maxH !== undefined ? maxH : ''}"
+                                  placeholder="Enter comments for this section..."></textarea>
+                    `;
+                    const ta = commentDiv.querySelector('textarea');
+
+                    // Keep only beforeinput here; input is handled centrally at the container level (prevents double-processing)
+                    ta.addEventListener('beforeinput', () => saveLastGoodState(ta));
+
+                    sectionDiv.appendChild(commentDiv);
+                    resizeCommentTextarea(ta);
+                    saveLastGoodState(ta);
+                }
+
+                container.appendChild(sectionDiv);
+            });
+
+            updateCalculations();
+
+            document.querySelectorAll('.comment-field').forEach(ta => {
+                resizeCommentTextarea(ta);
+                saveLastGoodState(ta);
+            });
+
+            formConfig.sections.forEach((section, sectionIndex) => {
+                updateCommentCharCount(`comment-${sectionIndex}`, `comment-${sectionIndex}-count`);
+            });
+        }
+
+        function selectRating(sectionIndex, questionIndex, value) {
+            if (!ratings[sectionIndex]) ratings[sectionIndex] = {};
+            ratings[sectionIndex][questionIndex] = value;
+
+            const section = document.getElementById(`section-${sectionIndex}`);
+            let buttons;
+
+            if (formConfig.sections[sectionIndex].type === "special") {
+                const subsections = section.querySelectorAll('.subsection');
+                const ratingDiv = subsections[questionIndex].querySelector('.rating-buttons');
+                buttons = ratingDiv ? ratingDiv.querySelectorAll('.rating-btn') : [];
+            } else if (formConfig.sections[sectionIndex].type === "rating-with-comment") {
+                const questionDiv = section.querySelector('.question');
+                const ratingDiv = questionDiv ? questionDiv.querySelector('.rating-buttons') : null;
+                buttons = ratingDiv ? ratingDiv.querySelectorAll('.rating-btn') : [];
+            } else {
+                const questionDivs = section.querySelectorAll('.question');
+                const ratingDiv = questionDivs[questionIndex].querySelector('.rating-buttons');
+                buttons = ratingDiv ? ratingDiv.querySelectorAll('.rating-btn') : [];
+            }
+
+            if (buttons) {
+                buttons.forEach(btn => {
+                    btn.classList.remove('selected');
+                    if (parseInt(btn.dataset.value, 10) === value) btn.classList.add('selected');
+                });
+            }
+
+            updateCalculations();
+            scheduleSaveCache();
+        }
+
+        function updateCalculations() {
+            let totalWeightedScore = 0;
+            let totalWeight = 0;
+
+            const summaryContent = document.getElementById('summaryContent');
+            summaryContent.innerHTML = '';
+
+            formConfig.sections.forEach((section, sectionIndex) => {
+                const sectionRatings = ratings[sectionIndex] || {};
+                let sectionTotal = 0;
+                let answeredCount = 0;
+
+                if (section.type === "special") {
+                    const subsectionCount = section.subsections.length;
+                    for (let i = 0; i < subsectionCount; i++) {
+                        if (sectionRatings[i] !== undefined) {
+                            sectionTotal += sectionRatings[i];
+                            answeredCount++;
+                        }
+                    }
+                } else if (section.type === "rating-with-comment") {
+                    if (sectionRatings[0] !== undefined) {
+                        sectionTotal += sectionRatings[0];
+                        answeredCount = 1;
+                    }
+                } else {
+                    const questionCount = section.questions.length;
+                    for (let i = 0; i < questionCount; i++) {
+                        if (sectionRatings[i] !== undefined) {
+                            sectionTotal += sectionRatings[i];
+                            answeredCount++;
+                        }
+                    }
+                }
+
+                const sectionAverage = answeredCount > 0 ? sectionTotal / answeredCount : 0;
+
+                let expectedCount;
+                if (section.type === "special") expectedCount = section.subsections.length;
+                else if (section.type === "rating-with-comment") expectedCount = 1;
+                else expectedCount = section.questions.length;
+
+                const weightedScore = (sectionAverage / 4) * section.weight;
+                totalWeightedScore += weightedScore;
+                totalWeight += section.weight;
+
+                const scoreElement = document.getElementById(`score-${sectionIndex}`);
+                if (scoreElement) {
+                    if (answeredCount === expectedCount) {
+                        scoreElement.textContent = `Score: ${weightedScore.toFixed(1)}%`;
+                    } else {
+                        scoreElement.textContent = `Score: - (${answeredCount}/${expectedCount} answered)`;
+                    }
+                }
+
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+                summaryItem.innerHTML = `
+                    <span>${section.title} (${section.weight}%):</span>
+                    <span>${answeredCount === expectedCount ? weightedScore.toFixed(1) + '%' : 'Incomplete'}</span>
+                `;
+                summaryContent.appendChild(summaryItem);
+            });
+
+            updatePrintButtonState();
+
+            const overallPercentage = totalWeight > 0 ? (totalWeightedScore / totalWeight) * 100 : 0;
+            const overallScoreElement = document.getElementById('overallScore');
+            if (overallScoreElement) {
+                overallScoreElement.textContent = `Overall Performance Score: ${overallPercentage.toFixed(1)}%`;
+            }
+
+            const summarySection = document.getElementById('summarySection');
+            if (summarySection) summarySection.style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!CONFIG.showHeight) document.body.classList.add('hide-comment-height-labels');
+
+            // Start disabled; enabled only when all required ratings/comments are filled
+            const printBtn = document.getElementById('printPdfBtn');
+            if (printBtn) { printBtn.setAttribute('disabled', 'disabled'); printBtn.disabled = true; }
+
+            initForm();
+
+            // Print / Save as PDF: only allow when complete
+            const printPdfBtnEl = document.getElementById('printPdfBtn');
+            if (printPdfBtnEl) {
+                printPdfBtnEl.addEventListener('click', function(ev) {
+                    if (!isPerformanceSummaryComplete()) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        return;
+                    }
+                    window.print();
+                });
+            }
+
+            // Default Review Date to today in edit mode (user can change it)
+            const reviewDateInput = document.getElementById('reviewDate');
+            if (reviewDateInput && !reviewDateInput.value) {
+                const today = new Date();
+                const y = today.getFullYear();
+                const m = String(today.getMonth() + 1).padStart(2, '0');
+                const d = String(today.getDate()).padStart(2, '0');
+                reviewDateInput.value = `${y}-${m}-${d}`;
+            }
+
+            // Attach beforeinput for reliable “last-good” capture on ALL comment fields (static + dynamic)
+            document.querySelectorAll('.comment-field').forEach(ta => {
+                ta.addEventListener('beforeinput', () => saveLastGoodState(ta));
+                resizeCommentTextarea(ta);
+                saveLastGoodState(ta);
+            });
+
+            const formContainer = document.getElementById('formContainer');
+            if (formContainer) {
+                // FIX: Single centralized handler (prevents double-processing/jank)
+                formContainer.addEventListener('input', (ev) => {
+                    if (ev.target.classList && ev.target.classList.contains('comment-field')) {
+                        handleCommentInput(ev.target);
+
+                        // If it's a section comment or finalSummary, recalc scores.
+                        if (ev.target.id && (ev.target.id.startsWith('comment-') || ev.target.id === 'finalSummary')) {
+                            updateCalculations();
+                        } else {
+                            updatePrintButtonState();
+                        }
+                    }
+                });
+
+                formContainer.addEventListener('paste', (ev) => {
+                    if (ev.target.classList && ev.target.classList.contains('comment-field')) {
+                        setTimeout(() => {
+                            handleCommentInput(ev.target);
+                            if (ev.target.id && (ev.target.id.startsWith('comment-') || ev.target.id === 'finalSummary')) {
+                                updateCalculations();
+                            } else {
+                                updatePrintButtonState();
+                            }
+                        }, 0);
+                    }
+                });
+            }
+
+            const developmentLearning = document.getElementById('developmentLearning');
+            if (developmentLearning) {
+                developmentLearning.addEventListener('beforeinput', () => saveLastGoodState(developmentLearning));
+            }
+
+            const futureGoals = document.getElementById('futureGoals');
+            if (futureGoals) {
+                futureGoals.addEventListener('beforeinput', () => saveLastGoodState(futureGoals));
+            }
+
+            const finalSummary = document.getElementById('finalSummary');
+            if (finalSummary) {
+                finalSummary.addEventListener('beforeinput', () => saveLastGoodState(finalSummary));
+            }
+
+            const additionalCommentsSection = document.getElementById('additionalCommentsSection');
+            const additionalComments = document.getElementById('additionalComments');
+            function updateAdditionalCommentsVisibility() {
+                if (!additionalCommentsSection || !additionalComments) return;
+                const hasContent = (additionalComments.value || '').trim().length > 0;
+                additionalCommentsSection.classList.toggle('additional-comments-empty', !hasContent);
+            }
+            if (additionalComments) {
+                additionalComments.addEventListener('beforeinput', () => saveLastGoodState(additionalComments));
+                additionalComments.addEventListener('input', () => {
+                    updateAdditionalCommentsVisibility();
+                });
+            }
+
+            updateCommentCharCount('developmentLearning', 'developmentLearning-count');
+            updateCommentCharCount('futureGoals', 'futureGoals-count');
+            updateCommentCharCount('finalSummary', 'finalSummary-count');
+            updateCommentCharCount('additionalComments', 'additionalComments-count');
+            document.querySelectorAll('.comment-field').forEach(ta => resizeCommentTextarea(ta));
+            updateAdditionalCommentsVisibility();
+
+            window.addEventListener('beforeprint', () => {
+                updateAdditionalCommentsVisibility();
+                document.querySelectorAll('.comment-field').forEach((ta) => setCommentHeightForPrint(ta));
+
+                const reviewField = document.getElementById('reviewDateField');
+                const reviewInput = document.getElementById('reviewDate');
+                if (reviewField && reviewInput && (!reviewInput.value || reviewInput.value.trim() === '')) {
+                    reviewField.classList.add('review-date-empty-print');
+                } else if (reviewField) {
+                    reviewField.classList.remove('review-date-empty-print');
+                }
+
+                const empDateField = document.getElementById('employeeSignatureDateField');
+                const empDateInput = document.getElementById('employeeSignatureDate');
+                if (empDateField && empDateInput && (!empDateInput.value || empDateInput.value.trim() === '')) {
+                    empDateField.classList.add('signature-date-empty-print');
+                } else if (empDateField) {
+                    empDateField.classList.remove('signature-date-empty-print');
+                }
+
+                const supDateField = document.getElementById('supervisorSignatureDateField');
+                const supDateInput = document.getElementById('supervisorSignatureDate');
+                if (supDateField && supDateInput && (!supDateInput.value || supDateInput.value.trim() === '')) {
+                    supDateField.classList.add('signature-date-empty-print');
+                } else if (supDateField) {
+                    supDateField.classList.remove('signature-date-empty-print');
+                }
+            });
+
+            window.addEventListener('afterprint', () => {
+                const reviewField = document.getElementById('reviewDateField');
+                if (reviewField) reviewField.classList.remove('review-date-empty-print');
+
+                const empDateField = document.getElementById('employeeSignatureDateField');
+                if (empDateField) empDateField.classList.remove('signature-date-empty-print');
+
+                const supDateField = document.getElementById('supervisorSignatureDateField');
+                if (supDateField) supDateField.classList.remove('signature-date-empty-print');
+            });
+        });
+    </script>
+</body>
+</html>
