@@ -782,7 +782,7 @@
 
         // Per-section max heights (dynamic comment-${sectionIndex} fields)
         // 0: 540, 1: 290, 2: 410, 3: 315, 4: 465
-        const sectionMaxHeights = { 0: 540, 1: 290, 2: 410, 3: 315, 4: 465 };
+        const sectionMaxHeights = { 0: 540, 1: 255, 2: 390, 3: 255, 4: 465 };
 
         // ---- Max-height enforcement helpers (revert based) ----
         const _lastGoodState = new WeakMap();
@@ -1248,13 +1248,20 @@
 
             initForm();
 
-            // Print / Save as PDF: only allow when complete
+            // Print / Save as PDF: only allow when complete and at 100% zoom (devicePixelRatio === 1)
             const printPdfBtnEl = document.getElementById('printPdfBtn');
             if (printPdfBtnEl) {
                 printPdfBtnEl.addEventListener('click', function(ev) {
                     if (!isPerformanceSummaryComplete()) {
                         ev.preventDefault();
                         ev.stopPropagation();
+                        return;
+                    }
+                    if (window.devicePixelRatio !== 1) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        const currentZoom = Math.round(window.devicePixelRatio * 100);
+                        alert('Your current zoom is ' + currentZoom + '%.\n\nPlease set the browser to 100% zoom before saving. Use Ctrl++ to zoom in or Ctrl+- to zoom out until you reach 100% (or Cmd++ / Cmd+- on Mac).');
                         return;
                     }
                     window.print();

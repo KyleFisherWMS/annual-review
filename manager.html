@@ -638,7 +638,7 @@
                 <span class="comment-height-label" id="additionalComments-height" aria-live="polite"></span>
                 <label for="additionalComments">Comments:</label>
                 <span class="char-count" id="additionalComments-count" aria-live="polite" style="display: none;"></span>
-                <textarea class="comment-field" id="additionalComments" name="additionalComments" maxlength="4000" data-max-height="745" placeholder="Enter any additional notes or information..."></textarea>
+                <textarea class="comment-field" id="additionalComments" name="additionalComments" maxlength="4000" data-max-height="735" placeholder="Enter any additional notes or information..."></textarea>
             </div>
         </div>
 
@@ -1267,13 +1267,20 @@
 
             initForm();
 
-            // Print / Save as PDF: only allow when complete
+            // Print / Save as PDF: only allow when complete and at 100% zoom (devicePixelRatio === 1)
             const printPdfBtnEl = document.getElementById('printPdfBtn');
             if (printPdfBtnEl) {
                 printPdfBtnEl.addEventListener('click', function(ev) {
                     if (!isPerformanceSummaryComplete()) {
                         ev.preventDefault();
                         ev.stopPropagation();
+                        return;
+                    }
+                    if (window.devicePixelRatio !== 1) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        const currentZoom = Math.round(window.devicePixelRatio * 100);
+                        alert('Your current zoom is ' + currentZoom + '%.\n\nPlease set the browser to 100% zoom before saving. Use Ctrl++ to zoom in or Ctrl+- to zoom out until you reach 100% (or Cmd++ / Cmd+- on Mac).');
                         return;
                     }
                     window.print();

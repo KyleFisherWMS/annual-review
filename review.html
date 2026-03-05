@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Select Your Form</title>
+<title>Form Selection</title>
 
 <style>
 
@@ -23,7 +23,7 @@ body{
 h1{
     color:#4a5560;
     margin-bottom:50px;
-    font-size:40px;
+    font-size:38px;
 }
 
 .card-container{
@@ -44,14 +44,29 @@ h1{
     cursor:pointer;
     transition:all .2s ease;
     position:relative;
-    font-size:22px;
-    font-weight:600;
     color:#4a5560;
 }
 
 .card:hover{
     transform:translateY(-5px);
     box-shadow:0 12px 24px rgba(0,0,0,0.15);
+}
+
+.card-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.card-title{
+    font-size:22px;
+    font-weight:600;
+}
+
+.card-sub{
+    font-size:16px;
+    margin-top:6px;
+    color:#6b7280;
 }
 
 .employee::before{
@@ -85,16 +100,21 @@ h1{
 
 <div class="page">
 
-<h1>Select Your Form</h1>
+<h1>Select Who This Form Is For</h1>
 
 <div class="card-container">
 
 <div class="card employee" onclick="location.href='employee.html'">
-Employee
+<div class="card-content">
+<div class="card-title">Employee</div>
+</div>
 </div>
 
 <div class="card manager" onclick="location.href='manager.html'">
-Manages People
+<div class="card-content">
+<div class="card-title">Manager</div>
+<div class="card-sub">Manages People</div>
+</div>
 </div>
 
 </div>
